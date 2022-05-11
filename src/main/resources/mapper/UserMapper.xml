@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hut.oyg.music.dao.UserMapper">
+
+    <sql id="base_column">
+        id,username,`password`,sex,phone_num,email,birth,introduction,location,pic,create_time,update_time
+    </sql>
+
+    <sql id="DTO">
+        sex
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            username,password,
+            <if test="sex != null">sex,</if>
+            <if test="phoneNum != null and phoneNum != ''">phone_num,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="birth != null">birth,</if>
+            <if test="introduction != null and introduction != ''">introduction,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="pic != null and pic != ''">pic,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{username},#{password},
+            <if test="sex != null">#{sex},</if>
+            <if test="phoneNum != null and phoneNum != ''">#{phoneNum},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="birth != null">#{birth},</if>
+            <if test="introduction != null and introduction != ''">#{introduction},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="pic != null and pic != ''">#{pic},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="update">
+        update user
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">`password` = #{password},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="phoneNum != null and phoneNum != ''">phone_num = #{phoneNum},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="birth != null">birth = #{birth},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="pic != null and pic != ''">pic = #{pic},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <select id="verifyPassword" resultType="java.lang.Integer">
+        select count(id) from user where username = #{username} and password = #{password}
+    </select>
+    
+    <select id="selectAll" resultType="edu.hut.oyg.music.entity.User">
+        select <include refid="base_column"/> from user
+    </select>
+    
+    <select id="selectByUsername" resultType="edu.hut.oyg.music.entity.User">
+        select <include refid="base_column"/> from user where username like "%"#{username}"%"
+    </select>
+
+    <select id="selectById" resultType="edu.hut.oyg.music.entity.User">
+        select <include refid="base_column"/> from user where id = #{id}
+    </select>
+
+    <select id="selectDTO" resultType="edu.hut.oyg.music.dto.admin.UserDTO">
+        select <include refid="DTO"/> from user
+    </select>
+</mapper>

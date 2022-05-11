@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hut.oyg.music.dao.SongMapper">
+
+    <sql id="baseColumn">
+        id,singer_id,`name`,introduction,create_time,update_time,pic,lyric,url
+    </sql>
+
+    <insert id="insert" parameterType="edu.hut.oyg.music.entity.Song" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into song
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="singerId != null">singer_id,</if>
+            `name`,
+            <if test="introduction != null">introduction,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="pic != null">pic,</if>
+            <if test="lyric != null">lyric,</if>
+            <if test="url != null">url,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="singerId != null">#{singerId},</if>
+            #{name},
+            <if test="introduction != null">#{introduction},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="lyric != null">#{lyric},</if>
+            <if test="url != null">#{url},</if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        delete from song where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="edu.hut.oyg.music.entity.Song">
+        update song
+        <set>
+            <if test="singerId != null">singer_id = #{singerId},</if>
+            <if test="name != null and name != ''">`name` = #{name},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="pic != null and pic != ''">pic = #{pic},</if>
+            <if test="lyric != null and lyric != ''">lyric = #{lyric},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="edu.hut.oyg.music.entity.Song">
+        select <include refid="baseColumn"/> from song
+    </select>
+
+    <select id="selectBySingerId" resultType="edu.hut.oyg.music.entity.Song">
+        select <include refid="baseColumn"/> from song
+        where singer_id = #{singerId}
+        <if test="name != null">and name like "%"#{name}"%"</if>
+    </select>
+
+    <select id="selectByName" resultType="edu.hut.oyg.music.entity.Song" parameterType="java.lang.String">
+        select <include refid="baseColumn"/> from song
+        where name like "%"#{name}"%"
+    </select>
+
+    <select id="selectById" resultType="edu.hut.oyg.music.entity.Song">
+        select <include refid="baseColumn"/> from song
+        where id = #{id}
+    </select>
+</mapper>
