@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hut.oyg.music.dao.SingerMapper">
+    <sql id="BaseColumn">
+        id,`name`,sex,pic,birth,location,introduction
+    </sql>
+    
+    <sql id="DTO">
+        sex,location
+    </sql>
+    
+    <insert id="insert" parameterType="edu.hut.oyg.music.entity.Singer" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into singer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">`name`,</if>
+            <if test="sex != null">sex,</if>
+            <if test="pic != null">pic,</if>
+            <if test="birth != null">birth,</if>
+            <if test="location != null">location,</if>
+            <if test="introduction != null">introduction,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="birth != null">#{birth},</if>
+            <if test="location != null">#{location},</if>
+            <if test="introduction != null">#{introduction},</if>
+        </trim>
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from singer where id = #{id}
+    </delete>
+    <update id="update" parameterType="edu.hut.oyg.music.entity.Singer">
+        update singer
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="pic != null and pic != ''">pic = #{pic},</if>
+            <if test="birth != null">birth = #{birth},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="selectById" resultType="edu.hut.oyg.music.entity.Singer" parameterType="java.lang.Integer">
+        select <include refid="BaseColumn"/> from singer where id = #{id}
+    </select>
+    
+    <select id="selectAll" resultType="edu.hut.oyg.music.entity.Singer">
+        select <include refid="BaseColumn"/> from singer
+    </select>
+    
+    <select id="selectByName" resultType="edu.hut.oyg.music.entity.Singer" parameterType="java.lang.String">
+        select <include refid="BaseColumn"/> from singer where name like "%"#{name}"%"
+    </select>
+    
+    <select id="selectDTO" resultType="edu.hut.oyg.music.dto.admin.SingerDTO">
+        select <include refid="DTO"/> from singer;
+    </select>
+</mapper>

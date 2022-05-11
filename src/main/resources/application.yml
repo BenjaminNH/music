@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: default
+  datasource:
+    url: jdbc:mysql://localhost:3306/music?serverTimezone=Asia/Shanghai
+    username: root
+    password: oyg20010517
+    druid:
+      min-idle: 3
+      initial-size: 3
+      keep-alive: true
+      filters: stat
+      filter:
+        stat:
+          enabled: true
+      web-stat-filter:
+        enabled: true
+        exclusions: "*.js,*.png,*.jpg,*.css,/druid/*"
+        url-pattern: /*
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: admin
+  mvc:
+    servlet:
+      load-on-startup: 1
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 10MB
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hut.oyg.music.dao.SongListMapper">
+
+    <sql id="base_column">
+        id,title,pic,introduction,style
+    </sql>
+
+    <insert id="insert" parameterType="edu.hut.oyg.music.entity.SongList" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into song_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="pic != null">pic,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="style != null">style,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="style != null">#{style},</if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        delete from song_list where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="edu.hut.oyg.music.entity.SongList">
+        update song_list
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="pic != null and pic != ''">pic = #{pic},</if>
+            <if test="introduction != null and introduction != ''">introduction = #{introduction},</if>
+            <if test="style != null and style != ''">style = #{style},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="edu.hut.oyg.music.entity.SongList">
+        select <include refid="base_column"/> from song_list
+    </select>
+
+    <select id="selectByTitle" resultType="edu.hut.oyg.music.entity.SongList">
+        select <include refid="base_column"/> from song_list
+        where title like "%"#{title}"%"
+    </select>
+
+    <select id="selectByStyle" resultType="edu.hut.oyg.music.entity.SongList">
+        select <include refid="base_column"/> from song_list
+        where style like "%"#{style}"%"
+    </select>
+
+    <select id="selectById" resultType="edu.hut.oyg.music.entity.SongList">
+        select <include refid="base_column"/> from song_list
+        where id = #{id}
+    </select>
+</mapper>
