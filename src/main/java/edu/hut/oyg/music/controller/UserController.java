@@ -7,7 +7,7 @@ import edu.hut.oyg.music.entity.User;
 import edu.hut.oyg.music.response.ResponseResult;
 import edu.hut.oyg.music.response.ResponseResultFactory;
 import edu.hut.oyg.music.service.UserService;
-import edu.hut.oyg.music.util.Const;
+import edu.hut.oyg.music.constant.PageConstants;
 import edu.hut.oyg.music.util.FileUtil;
 import edu.hut.oyg.music.util.PageRespUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +99,7 @@ public class UserController {
     @GetMapping(value = {"/user","/user/{username}"})
     public ResponseResult<Map<String,Object>> selectList(@PathVariable(value = "username",required = false) String username,
                                                         @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-                                                        @RequestParam(value = "pageSize",defaultValue = Const.DEFAULT_PAGE_SIZE) Integer pageSize) {
+                                                        @RequestParam(value = "pageSize",defaultValue = PageConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
         ResponseResult<Map<String,Object>> result;
         PageHelper.startPage(pageNo,pageSize);
         List<User> users = username == null ? service.selectAll() : service.selectByUsername(username);

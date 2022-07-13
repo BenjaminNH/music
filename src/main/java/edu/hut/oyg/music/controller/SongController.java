@@ -6,7 +6,7 @@ import edu.hut.oyg.music.entity.Song;
 import edu.hut.oyg.music.response.ResponseResult;
 import edu.hut.oyg.music.response.ResponseResultFactory;
 import edu.hut.oyg.music.service.SongService;
-import edu.hut.oyg.music.util.Const;
+import edu.hut.oyg.music.constant.PageConstants;
 import edu.hut.oyg.music.util.FileUtil;
 import edu.hut.oyg.music.util.PageRespUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -148,7 +148,7 @@ public class SongController {
     public ResponseResult<Map<String,Object>> selectList(@PathVariable(value = "id",required = false) Integer singerId,
                                                          @PathVariable(value = "name",required = false) String name,
                                                          @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-                                                         @RequestParam(value = "pageSize",defaultValue = Const.DEFAULT_PAGE_SIZE) Integer pageSize) {
+                                                         @RequestParam(value = "pageSize",defaultValue = PageConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
         ResponseResult<Map<String,Object>> result;
         PageHelper.startPage(pageNo,pageSize);
         List<Song> songs = singerId == null ? service.selectAll() : service.selectBySingerId(singerId,name);

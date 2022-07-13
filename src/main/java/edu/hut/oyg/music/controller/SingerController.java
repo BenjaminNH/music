@@ -7,11 +7,11 @@ import edu.hut.oyg.music.entity.Singer;
 import edu.hut.oyg.music.response.ResponseResult;
 import edu.hut.oyg.music.response.ResponseResultFactory;
 import edu.hut.oyg.music.service.SingerService;
-import edu.hut.oyg.music.util.Const;
+import edu.hut.oyg.music.constant.PageConstants;
 import edu.hut.oyg.music.util.FileUtil;
 import edu.hut.oyg.music.util.PageRespUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +24,14 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class SingerController {
 
-    @Autowired
-    SingerService service;
+    private final SingerService singerService;
 
     @PostMapping("/singer")
     public ResponseResult<Singer> addSinger(Singer singer) {
-        boolean success = service.insert(singer);
+        boolean success = singerService.insert(singer);
         ResponseResult<Singer> result;
         if (success) {
             result = ResponseResultFactory.genSuccessResult(singer,"add success");
@@ -43,7 +43,7 @@ public class SingerController {
 
     @DeleteMapping("/singer/{id}")
     public ResponseResult<Object> deleteSinger(@PathVariable("id") Integer id) {
-        boolean success = service.delete(id);
+        boolean success = singerService.delete(id);
         ResponseResult<Object> result;
         if (success) {
             result = ResponseResultFactory.genSuccessResult(null,"delete success");
@@ -55,10 +55,10 @@ public class SingerController {
 
     @PutMapping("/singer")
     public ResponseResult<Singer> updateSinger(Singer singer) {
-        boolean success = service.update(singer);
+        boolean success = singerService.update(singer);
         ResponseResult<Singer> result;
         if (success) {
-            singer = service.selectById(singer.getId());
+            singer = singerService.selectById(singer.getId());
             result = ResponseResultFactory.genSuccessResult(singer,"update success");
         } else {
             result = ResponseResultFactory.genFailResult(null,"update fail");
@@ -70,9 +70,9 @@ public class SingerController {
     @GetMapping(value = {"/singer","/{name}/singer"})
     public ResponseResult<Map<String,Object>> selectList(@PathVariable(value = "name",required = false) String name,
                                                            @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-                                                           @RequestParam(value = "pageSize",defaultValue = Const.DEFAULT_PAGE_SIZE) Integer pageSize) {
+                                                           @RequestParam(value = "pageSize",defaultValue = PageConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<Singer> singers = name == null ? service.selectAll() : service.selectByName(name);
+        List<Singer> singers = name == null ? singerService.selectAll() : singerService.selectByName(name);
         PageInfo<Singer> info = new PageInfo<>(singers);
         Map<String,Object> data = PageRespUtil.getRes(info,"singers");
         ResponseResult<Map<String,Object>> result;
@@ -86,7 +86,7 @@ public class SingerController {
 
     @GetMapping("/singer/{id}")
     public ResponseResult<Singer> selectById(@PathVariable("id") Integer id) {
-        Singer singer = service.selectById(id);
+        Singer singer = singerService.selectById(id);
         ResponseResult<Singer> result;
         if (singer != null) {
             result = ResponseResultFactory.genSuccessResult(singer,"get by id success");
@@ -99,7 +99,7 @@ public class SingerController {
     @GetMapping("/admin/singer-info")
     public ResponseResult<List<SingerDTO>> selectDTO() {
         ResponseResult<List<SingerDTO>> result;
-        List<SingerDTO> singerDTO = service.selectDTO();
+        List<SingerDTO> singerDTO = singerService.selectDTO();
         if (singerDTO != null) {
             result = ResponseResultFactory.genSuccessResult(singerDTO,"get success");
         } else {
@@ -116,17 +116,17 @@ public class SingerController {
             result = ResponseResultFactory.genFailResult(null,"empty file");
             return result;
         }
-        Singer singer = service.selectById(id);
+        Singer singer = singerService.selectById(id);
         boolean deleted = FileUtil.deleteFile(singer.getPic());
         if (!deleted)
             log.warn("delete old singerPic fail : {}",singer.getPic());
-        String pic = service.saveSingerPic(uploadFile);
+        String pic = singerService.saveSingerPic(uploadFile);
         if (pic == null) {
             result = ResponseResultFactory.genFailResult(null,"save pic fail");
             return result;
         }
         singer.setPic(pic);
-        boolean success = service.update(singer);
+        boolean success = singerService.update(singer);
         if (!success) {
             FileUtil.deleteFile(pic);
             result = ResponseResultFactory.genFailResult(null,"update singerPic fail");

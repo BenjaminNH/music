@@ -1,20 +1,23 @@
 package edu.hut.oyg.music.controller;
 
-import edu.hut.oyg.music.response.ResponseCode;
 import edu.hut.oyg.music.response.ResponseResult;
 import edu.hut.oyg.music.response.ResponseResultFactory;
 import edu.hut.oyg.music.service.AdminService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    AdminService adminService;
+    private final AdminService adminService;
 
     @PostMapping("/admin/login")
     public ResponseResult<String> login(@RequestParam("name") String name,
@@ -33,7 +36,7 @@ public class AdminController {
 
     @RequestMapping("/preload")
     public ResponseResult<String> preload(HttpSession session) {
-        return ResponseResultFactory.genSuccessResult("preload","message");
+        return null;
     }
 
 }

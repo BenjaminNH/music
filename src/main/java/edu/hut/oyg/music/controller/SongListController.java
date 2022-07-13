@@ -2,17 +2,15 @@ package edu.hut.oyg.music.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import edu.hut.oyg.music.entity.Song;
 import edu.hut.oyg.music.entity.SongList;
 import edu.hut.oyg.music.response.ResponseResult;
 import edu.hut.oyg.music.response.ResponseResultFactory;
 import edu.hut.oyg.music.service.SongListService;
-import edu.hut.oyg.music.util.Const;
+import edu.hut.oyg.music.constant.PageConstants;
 import edu.hut.oyg.music.util.FileUtil;
 import edu.hut.oyg.music.util.PageRespUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,7 +69,7 @@ public class SongListController {
     public ResponseResult<Map<String,Object>> selectList(@PathVariable(value = "title",required = false) String title,
                                                          @PathVariable(value = "style",required = false) String style,
                                                          @RequestParam(value = "pageNo",defaultValue = "1") Integer pageNo,
-                                                         @RequestParam(value = "pageSize",defaultValue = Const.DEFAULT_PAGE_SIZE) Integer pageSize) {
+                                                         @RequestParam(value = "pageSize",defaultValue = PageConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
         ResponseResult<Map<String,Object>> result;
         List<SongList> list;
         PageHelper.startPage(pageNo,pageSize);
